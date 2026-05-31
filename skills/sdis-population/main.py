@@ -13,7 +13,21 @@ GEO_API_URL = "https://geo.api.gouv.fr/communes"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 TIMEOUT = 20
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data")
+def _find_data_dir():
+    """Cherche le dossier data/ dans plusieurs emplacements possibles."""
+    skill_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.environ.get("SDIS_DATA_DIR", ""),                        # 1. variable d'environnement
+        os.path.join(skill_dir, "..", "data"),                      # 2. install globale (~/.claude/skills/data/)
+        os.path.join(skill_dir, "..", "..", "data"),                 # 3. mode développement (repo cloné)
+        os.path.join(os.path.expanduser("~"), ".claude", "sdis-data"),  # 4. dossier dédié optionnel
+    ]
+    for path in candidates:
+        if path and os.path.isdir(os.path.normpath(path)):
+            return os.path.normpath(path)
+    return os.path.normpath(candidates[1])  # défaut install globale, même si absent
+
+DATA_DIR = _find_data_dir()
 RP_FILE = os.path.join(DATA_DIR, "rp2022_iris.csv")
 BPE_FILE = os.path.join(DATA_DIR, "bpe-ensemble.csv")
 

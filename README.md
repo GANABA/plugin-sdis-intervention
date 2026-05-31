@@ -26,13 +26,23 @@ pip install -r requirements.txt
 cp -r skills/* ~/.claude/skills/
 ```
 
-### Données INSEE (optionnel mais recommandé)
+### Données INSEE — accès depuis l'install globale
 
-Pour des données démographiques précises, télécharger les fichiers INSEE dans `data/` :
+`sdis-population` utilise des fichiers CSV locaux (RP 2022, BPE). Deux options :
 
+**Option A — Copier les données dans le dossier skills (recommandé)**
 ```bash
-# Voir data/README.md pour les URLs et instructions détaillées
+mkdir -p ~/.claude/skills/data
+cp data/rp2022_iris.csv data/bpe-ensemble.csv ~/.claude/skills/data/
 ```
+Le script les trouvera automatiquement au chemin `~/.claude/skills/data/`.
+
+**Option B — Variable d'environnement (données dans le repo)**
+```bash
+# Ajouter dans ~/.bashrc ou ~/.zshrc :
+export SDIS_DATA_DIR="/chemin/absolu/vers/plugin-sdis-intervention/data"
+```
+Le script lit `$SDIS_DATA_DIR` en priorité — les données restent dans le repo.
 
 Sans ces fichiers, `sdis-population` fonctionne en mode dégradé (OSM + estimation globale).
 
