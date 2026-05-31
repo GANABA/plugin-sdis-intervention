@@ -6,10 +6,18 @@ import math
 import sys
 import requests
 
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+OVERPASS_URLS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]
 IGN_WFS_URL = "https://data.geopf.fr/wfs"
 BAN_URL = "https://api-adresse.data.gouv.fr/search/"
 TIMEOUT = 20
+OVERPASS_HEADERS = {
+    "User-Agent": "sdis-intervention-plugin/1.0 (urgence territoriale)",
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+}
 
 # Débits de référence SDIS (L/min pour 100m² de surface, sauf forêt = L/min par hectare)
 DEBITS_SDIS = {
@@ -19,6 +27,23 @@ DEBITS_SDIS = {
     "entrepot": 180,
     "foret": 250,
 }
+
+
+def overpass_query(query):
+    """Exécute une requête Overpass avec fallback sur miroir alternatif."""
+    for url in OVERPASS_URLS:
+        try:
+            resp = requests.post(
+                url,
+                data={"data": query},
+                headers=OVERPASS_HEADERS,
+                timeout=25,
+            )
+            if resp.status_code == 200:
+                return resp.json()
+        except Exception:
+            continue
+    return None
 
 
 def geocode(address):
@@ -67,14 +92,11 @@ def cmd_localise(args):
         f"out body;"
     )
     try:
-        resp = requests.post(
-            OVERPASS_URL,
-            data={"data": query},
-            headers={"Accept": "application/json"},
-            timeout=25,
-        )
-        resp.raise_for_status()
-        for el in resp.json().get("elements", []):
+        result = overpass_query(query)
+        if result is None:
+            erreurs.append("OSM Overpass: tous les miroirs ont échoué (406/timeout)")
+            result = {"elements": []}
+        for el in result.get("elements", []):
             tags = el.get("tags", {})
             bornes.append({
                 "type": tags.get("fire_hydrant:type", "inconnu"),

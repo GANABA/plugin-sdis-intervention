@@ -1,9 +1,14 @@
 # Troubleshooting — sdis-eau
 
-## OSM Overpass — HTTP 406 depuis un browser
+## OSM Overpass — HTTP 406
 
-**Cause :** L'API Overpass rejette certains User-Agents navigateur.
-**Solution :** Le script utilise `requests.post(..., data={'data': query})` en Python — fonctionne normalement. Si persistant, utiliser le miroir : `https://overpass.kumi.systems/api/interpreter`
+**Cause :** L'API Overpass rejette les requêtes sans `User-Agent` explicite.
+**Solution appliquée :** Le script envoie maintenant les headers :
+- `User-Agent: sdis-intervention-plugin/1.0`
+- `Accept: application/json`
+- `Content-Type: application/x-www-form-urlencoded`
+
+Un miroir alternatif (`overpass.kumi.systems`) est tenté automatiquement en fallback si le serveur principal échoue.
 
 ## Aucune borne trouvée dans le rayon
 

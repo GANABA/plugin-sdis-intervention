@@ -8,8 +8,33 @@ import requests
 
 BAN_URL = "https://api-adresse.data.gouv.fr/search/"
 IGN_WFS_URL = "https://data.geopf.fr/wfs"
-OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+OVERPASS_URLS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]
+OVERPASS_HEADERS = {
+    "User-Agent": "sdis-intervention-plugin/1.0 (urgence territoriale)",
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+}
 TIMEOUT = 20
+
+
+def overpass_query(query):
+    """Exécute une requête Overpass avec fallback sur miroir alternatif."""
+    for url in OVERPASS_URLS:
+        try:
+            resp = requests.post(
+                url,
+                data={"data": query},
+                headers=OVERPASS_HEADERS,
+                timeout=25,
+            )
+            if resp.status_code == 200:
+                return resp.json()
+        except Exception:
+            continue
+    return None
 
 
 def geocode(address):
@@ -121,13 +146,12 @@ def cmd_qualifier(args):
     )
     acces = []
     try:
-        resp = requests.post(
-            OVERPASS_URL, data={"data": query},
-            headers={"Accept": "application/json"}, timeout=20,
-        )
-        resp.raise_for_status()
+        result = overpass_query(query)
+        if result is None:
+            erreurs.append("OSM voirie: tous les miroirs Overpass ont échoué")
+            result = {"elements": []}
         types_utiles = {"residential", "primary", "secondary", "tertiary", "service", "unclassified"}
-        for el in resp.json().get("elements", []):
+        for el in result.get("elements", []):
             tags = el.get("tags", {})
             if tags.get("highway") in types_utiles:
                 acces.append({
