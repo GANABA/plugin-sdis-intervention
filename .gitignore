@@ -1,0 +1,21 @@
+# Données INSEE volumineuses — à télécharger localement (voir data/README.md)
+data/*.csv
+data/*.zip
+data/*.xlsx
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
