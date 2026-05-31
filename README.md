@@ -16,7 +16,7 @@ Plugin Claude Code d'aide à la décision opérationnelle pour les sapeurs-pompi
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/<votre-groupe>/<votre-repo>
+git clone https://github.com/GANABA/plugin-sdis-intervention.git
 cd plugin-sdis-intervention
 
 # 2. Installer les dépendances Python
