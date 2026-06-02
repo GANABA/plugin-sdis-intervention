@@ -10,6 +10,8 @@ BAN_URL = "https://api-adresse.data.gouv.fr/search/"
 IGN_WFS_URL = "https://data.geopf.fr/wfs"
 OVERPASS_URLS = [
     "https://overpass-api.de/api/interpreter",
+    "https://lz4.overpass-api.de/api/interpreter",
+    "https://z.overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
 ]
 OVERPASS_HEADERS = {

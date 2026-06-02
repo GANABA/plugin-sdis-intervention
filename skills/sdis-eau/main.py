@@ -8,6 +8,8 @@ import requests
 
 OVERPASS_URLS = [
     "https://overpass-api.de/api/interpreter",
+    "https://lz4.overpass-api.de/api/interpreter",
+    "https://z.overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
 ]
 IGN_WFS_URL = "https://data.geopf.fr/wfs"
