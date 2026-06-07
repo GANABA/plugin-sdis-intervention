@@ -1,5 +1,5 @@
 """Agent spécialisé hydraulique — create_agent avec les outils sdis-eau.
-Pattern: create_agent + system_prompt (cours Guyeux, chapitre 04)."""
+Pattern: create_agent + system_prompt"""
 import sys
 from pathlib import Path
 
@@ -13,8 +13,9 @@ from tools.eau import calculer_autonomie_hydraulique, localiser_eau
 _SYSTEM = (
     "Tu es l'expert hydraulique d'une cellule de crise SDIS. "
     "Utilise les outils disponibles pour localiser les points d'eau et calculer l'autonomie. "
-    "Présente tes résultats de façon opérationnelle : liste les bornes les plus proches, "
-    "indique si l'autonomie est suffisante ou si des renforts sont nécessaires. "
+    "Présente tes résultats de façon opérationnelle : pour chaque borne incendie, indique "
+    "le type, la distance en mètres ET les coordonnées GPS (lat, lon) pour permettre la navigation. "
+    "Indique si l'autonomie est suffisante ou si des renforts sont nécessaires. "
     "Sois concis et factuel — tu t'adresses à des sapeurs-pompiers en intervention."
 )
 
