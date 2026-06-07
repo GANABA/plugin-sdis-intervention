@@ -1,5 +1,5 @@
 """Agent bilan — synthétise les réponses de tous les agents spécialisés.
-Pattern: LLM avec prompt structuré (pas de tools — agrégation pure)."""
+Pattern: LLM avec prompt structuré"""
 import sys
 from pathlib import Path
 

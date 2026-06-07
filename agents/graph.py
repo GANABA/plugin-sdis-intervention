@@ -1,5 +1,5 @@
-"""Graphe LangGraph SDIS — orchestrateur + agents spécialisés + bilan.
-Pattern: StateGraph + add_conditional_edges + boucle (cours Guyeux, chapitre 06)."""
+"""Graphe LangGraph SDIS - orchestrateur + agents spécialisés + bilan.
+Pattern: StateGraph + add_conditional_edges + boucle"""
 import sys
 from pathlib import Path
 from typing import Literal
@@ -16,7 +16,7 @@ from nodes.orchestrateur import orchestrateur_node
 from state import SDISState
 
 # ---------------------------------------------------------------------------
-# Routeur — lit la tête de la file intents_restants et dispatche vers le bon agent
+# Routeur - lit la tête de la file intents_restants et dispatche vers le bon agent
 # Bonne pratique cours : routeur = fonction pure rapide, pas de LLM
 # ---------------------------------------------------------------------------
 
@@ -52,17 +52,17 @@ def build_graph(checkpointer=None):
     g.add_node("agent_meteo", agent_meteo_node)
     g.add_node("agent_bilan", agent_bilan_node)
 
-    # Entrée → orchestrateur
+    # Entrée - orchestrateur
     g.add_edge(START, "orchestrateur")
 
-    # Après orchestrateur → routeur décide quel agent appeler
+    # Après orchestrateur - routeur décide quel agent appeler
     g.add_conditional_edges("orchestrateur", router)
 
-    # Après chaque agent → retour au routeur (boucle du cours, page 86)
+    # Après chaque agent - retour au routeur
     for agent in ["agent_eau", "agent_batiment", "agent_population", "agent_meteo"]:
         g.add_conditional_edges(agent, router)
 
-    # Après bilan → fin
+    # Après bilan - fin
     g.add_edge("agent_bilan", END)
 
     return g.compile(checkpointer=checkpointer)

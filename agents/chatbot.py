@@ -1,5 +1,5 @@
 """Chatbot CLI SDIS — interface de conversation avec streaming et mémoire par session.
-Pattern: InMemorySaver + thread_id + stream_mode (cours Guyeux, chapitres 05 et 06).
+Pattern: InMemorySaver + thread_id + stream_mode.
 
 Usage:
     python chatbot.py
@@ -21,7 +21,7 @@ from graph import build_graph
 
 BANNER = """
 ╔══════════════════════════════════════════════════════╗
-║        CELLULE DE CRISE SDIS — Assistant IA          ║
+║        CELLULE DE CRISE SDIS - Assistant IA          ║
 ║  Posez vos questions en langage naturel.             ║
 ║  Tapez 'quitter' ou Ctrl+C pour terminer.            ║
 ╚══════════════════════════════════════════════════════╝"""

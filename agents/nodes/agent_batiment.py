@@ -1,5 +1,5 @@
 """Agent spécialisé bâtiment — create_agent avec les outils sdis-batiment.
-Pattern: create_agent + system_prompt (cours Guyeux, chapitre 04)."""
+Pattern: create_agent + system_prompt"""
 import sys
 from pathlib import Path
 
