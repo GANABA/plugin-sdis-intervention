@@ -39,7 +39,7 @@ def overpass_query(query):
                 url,
                 data={"data": query},
                 headers=OVERPASS_HEADERS,
-                timeout=25,
+                timeout=15,
             )
             if resp.status_code == 200:
                 return resp.json()

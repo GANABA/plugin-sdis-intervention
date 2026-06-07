@@ -10,7 +10,7 @@ _SCRIPT = str(Path(__file__).parent.parent.parent / "skills" / "sdis-eau" / "mai
 
 
 def _run(cmd: list[str]) -> str:
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
     if result.returncode != 0:
         err = result.stderr.strip() or "Erreur sdis-eau"
         return json.dumps({"error": err})
