@@ -6,60 +6,58 @@ Cellule de crise conversationnelle pour les sapeurs-pompiers. Le système orches
 
 ## Architecture du graphe
 
+> Diagramme généré automatiquement via `app.get_graph(xray=True).draw_mermaid()` — voir `generate_graph.py`.
+
 ```mermaid
-flowchart TD
-    U([Pompier — message texte]) --> O
-
-    O["🎯 **Orchestrateur**
-    Classification LLM + sortie structurée Pydantic
-    Extrait : adresse · rayon · intents"]
-
-    O -->|"intents_restants = ['eau','batiment',...]"| R
-
-    R{{"🔀 **Routeur**
-    Lit la tête de la file
-    intents_restants"}}
-
-    R -->|eau| AE
-    R -->|batiment| AB
-    R -->|population| AP
-    R -->|meteo| AM
-    R -->|bilan| AG
-    R -->|"file vide"| END2(["✅ Fin"])
-
-    AE["💧 **Agent Hydraulique**
-    — localiser_eau
-    — calculer_autonomie_hydraulique"]
-
-    AB["🏢 **Agent Bâtiment**
-    — qualifier_batiment"]
-
-    AP["👥 **Agent Population**
-    — analyser_zone_population
-    — analyser_vulnerables
-    — lister_erp"]
-
-    AM["🌤️ **Agent Météo**
-    — conditions_meteo_et_risque
-    — alertes_crues_vigicrues"]
-
-    AG["📋 **Agent Bilan**
-    Synthèse LCEL — pas d'outils
-    Génère la fiche COS"]
-
-    AE -->|"retire 'eau' de la file"| R
-    AB -->|"retire 'batiment' de la file"| R
-    AP -->|"retire 'population' de la file"| R
-    AM -->|"retire 'meteo' de la file"| R
-    AG --> FIN(["📄 Rapport final COS"])
-
-    style O fill:#4A90D9,color:#fff
-    style R fill:#F5A623,color:#fff
-    style AE fill:#7ED321,color:#fff
-    style AB fill:#7ED321,color:#fff
-    style AP fill:#7ED321,color:#fff
-    style AM fill:#7ED321,color:#fff
-    style AG fill:#9B59B6,color:#fff
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	orchestrateur(orchestrateur)
+	agent_eau(agent_eau)
+	agent_batiment(agent_batiment)
+	agent_population(agent_population)
+	agent_meteo(agent_meteo)
+	agent_bilan(agent_bilan)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> orchestrateur;
+	agent_batiment -.-> __end__;
+	agent_batiment -.-> agent_bilan;
+	agent_batiment -.-> agent_eau;
+	agent_batiment -.-> agent_meteo;
+	agent_batiment -.-> agent_population;
+	agent_eau -.-> __end__;
+	agent_eau -.-> agent_batiment;
+	agent_eau -.-> agent_bilan;
+	agent_eau -.-> agent_meteo;
+	agent_eau -.-> agent_population;
+	agent_meteo -.-> __end__;
+	agent_meteo -.-> agent_batiment;
+	agent_meteo -.-> agent_bilan;
+	agent_meteo -.-> agent_eau;
+	agent_meteo -.-> agent_population;
+	agent_population -.-> __end__;
+	agent_population -.-> agent_batiment;
+	agent_population -.-> agent_bilan;
+	agent_population -.-> agent_eau;
+	agent_population -.-> agent_meteo;
+	orchestrateur -.-> __end__;
+	orchestrateur -.-> agent_batiment;
+	orchestrateur -.-> agent_bilan;
+	orchestrateur -.-> agent_eau;
+	orchestrateur -.-> agent_meteo;
+	orchestrateur -.-> agent_population;
+	agent_bilan --> __end__;
+	agent_batiment -.-> agent_batiment;
+	agent_eau -.-> agent_eau;
+	agent_meteo -.-> agent_meteo;
+	agent_population -.-> agent_population;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc
 ```
 
 ### Principe de fonctionnement
