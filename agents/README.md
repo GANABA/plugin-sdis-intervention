@@ -6,9 +6,9 @@ Cellule de crise conversationnelle pour les sapeurs-pompiers. Le système orches
 
 ## Architecture du graphe
 
-> Diagramme généré automatiquement via `app.get_graph(xray=True).draw_mermaid()` — voir `generate_graph.py`.
-
 ![Graphe LangGraph SDIS](graph.png)
+
+> Généré par `generate_graph_clean.py` via l'API Mermaid.ink. Seules les transitions réelles sont représentées : pipeline séquentiel (traits pleins) et sorties anticipées si la file est vide (pointillés).
 
 ```mermaid
 ---
