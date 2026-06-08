@@ -8,6 +8,8 @@ Cellule de crise conversationnelle pour les sapeurs-pompiers. Le système orches
 
 > Diagramme généré automatiquement via `app.get_graph(xray=True).draw_mermaid()` — voir `generate_graph.py`.
 
+![Graphe LangGraph SDIS](graph.png)
+
 ```mermaid
 ---
 config:
